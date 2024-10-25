@@ -31,5 +31,19 @@ namespace DeliveryService
 				Console.WriteLine("Таблица Orders создана");
 			}
 		}
-	}
+        public void CreateResultTable(string connectionString)
+        {
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+
+                SqliteCommand command = new SqliteCommand();
+                command.Connection = connection;
+                command.CommandText = "CREATE TABLE Results(_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,OrderId INTEGER NOT NULL, Weight INTEGER NOT NULL, DistrictId INTEGER NOT NULL, DeliveryTime TEXT NOT NULL)";
+                command.ExecuteNonQuery();
+
+                Console.WriteLine("Таблица Results создана");
+            }
+        }
+    }
 }

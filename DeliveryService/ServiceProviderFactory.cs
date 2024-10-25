@@ -14,6 +14,8 @@ namespace DeliveryService
 		{
 			var services = new ServiceCollection();
 			services.AddTransient<IFilterService,FilterRepository>();
+			services.AddTransient<IValidatorService,Validator>();
+			services.AddTransient<IDateTimeFormatterService, DateTimeFormatter>();
 			var serviceProvier = services.BuildServiceProvider();
 			return serviceProvier;
 		}

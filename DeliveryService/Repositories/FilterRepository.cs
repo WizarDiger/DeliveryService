@@ -1,8 +1,10 @@
 ﻿using DeliveryService.Interfaces;
 using DeliveryService.Models;
 using Microsoft.Data.Sqlite;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,13 +13,42 @@ namespace DeliveryService.Repositories
 {
 	public class FilterRepository:IFilterService
 	{
-		public void FilterData(int districtId,DateTime startTime, DateTime endTime)
+		public void FilterData(int cityDistrict,DateTime firstDeliveryTime, ServiceProvider serviceProvider)
 		{
 			var connectionString = "Data Source=ordersdata.db";
-			var orders = SelectOrders(connectionString, districtId);
-			var filteredOtders = FilterFile(orders, startTime,endTime);
-			PrintResult(filteredOtders);
+			var orders = SelectOrders(connectionString, cityDistrict);
+			var filteredOrders = FilterFile(orders, firstDeliveryTime, firstDeliveryTime.AddMinutes(30.0), serviceProvider);
+			Console.WriteLine("Отфильтрованные записи");
+			PrintResult(filteredOrders);
+			SaveResult(filteredOrders, connectionString);
 		}
+		private void SaveResult(List<Order> orders, string connectionString)
+		{
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+				var command = new SqliteCommand($@"DELETE FROM Results", connection);
+                var reader = command.ExecuteReader();
+				foreach (var order in orders)
+				{
+
+					using var saveResultCommand = new SqliteCommand($@"INSERT INTO ""Results"" (""OrderId"",""Weight"", ""DistrictId"", ""DeliveryTime"") VALUES (@orderId,@weight,@districtId,@deliveryTime)", connection)
+					{
+						Parameters =
+						{
+							new("@orderId",order.Id),
+							new("@weight",order.Weight),
+                            new("@districtId",order.DisctrictId),
+                            new("@deliveryTime",order.DeliveryTime)
+						}
+					};
+					saveResultCommand.ExecuteNonQuery();
+				}
+            }
+
+
+            
+        }
 		private List<(int, int, int, string)> SelectOrders(string connectionString, int districtId)
 		{
 			using (var connection = new SqliteConnection(connectionString))
@@ -41,15 +72,14 @@ namespace DeliveryService.Repositories
 				return ordersData;
 			}
 		}
-		private List<Order> FilterFile(List<(int, int, int, string)> ordersData, DateTime startTime, DateTime endTime)
+		private List<Order> FilterFile(List<(int, int, int, string)> ordersData, DateTime startTime, DateTime endTime, ServiceProvider serviceProvider)
 		{
+			IDateTimeFormatterService? dateTimeFormatterService = serviceProvider.GetService<IDateTimeFormatterService>();
 			var filteredData = new List<Order>();
 			foreach (var order in ordersData)
 			{
-				var timeData = order.Item4.Split(' ');
-				var date = timeData[0].Split("-");
-				var time = timeData[1].Split(":");
-				var dateTime = new DateTime(int.Parse(date[0]), int.Parse(date[1]), int.Parse(date[2]), int.Parse(time[0]), int.Parse(time[1]), int.Parse(time[2]));
+				var dateTimeString = dateTimeFormatterService.Format(order.Item4);
+				var dateTime = DateTime.Parse(dateTimeString);
 				if (dateTime > startTime && dateTime < endTime)
 				{
 					filteredData.Add(new Order() { Id = order.Item1, Weight = order.Item2, DisctrictId = order.Item3, DeliveryTime = dateTime });

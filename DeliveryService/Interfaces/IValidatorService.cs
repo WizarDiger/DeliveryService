@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace DeliveryService.Interfaces
 {
-	internal interface IFilterService
-	{
-		void FilterData(int cityDisctrict, DateTime firstDeliveryTime, ServiceProvider serviceProvider);
-	}
+    internal interface IValidatorService
+    {
+        (int,DateTime) Validate(ServiceProvider serviceProvider);
+    }
 }
