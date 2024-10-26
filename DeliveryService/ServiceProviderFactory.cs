@@ -6,18 +6,22 @@ using System.Threading.Tasks;
 using DeliveryService.Interfaces;
 using DeliveryService.Repositories;
 using Microsoft.Extensions.DependencyInjection;
+using Spectre.Console;
+using Spectre;
+using Serilog;
 namespace DeliveryService
 {
-	internal class ServiceProviderFactory
+	public class ServiceProviderFactory
 	{
-		public ServiceProvider Create()
+		public ServiceCollectionRegistrar Create(ILogger logger)
 		{
 			var services = new ServiceCollection();
 			services.AddTransient<IFilterService,FilterRepository>();
 			services.AddTransient<IValidatorService,Validator>();
 			services.AddTransient<IDateTimeFormatterService, DateTimeFormatter>();
-			var serviceProvier = services.BuildServiceProvider();
-			return serviceProvier;
+			services.AddSingleton(logger);
+			var registar = new ServiceCollectionRegistrar(services);
+			return registar;
 		}
 	}
 }

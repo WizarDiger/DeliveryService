@@ -2,6 +2,7 @@
 using DeliveryService.Models;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.DependencyInjection;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -13,11 +14,17 @@ namespace DeliveryService.Repositories
 {
 	public class FilterRepository:IFilterService
 	{
-		public void FilterData(int cityDistrict,DateTime firstDeliveryTime, ServiceProvider serviceProvider)
+		private readonly IDateTimeFormatterService dateTimeFormatter;
+        private readonly ILogger logger;
+        public FilterRepository(IDateTimeFormatterService dateTimeFormatter, ILogger logger) 
 		{
-			var connectionString = "Data Source=ordersdata.db";
+			this.dateTimeFormatter = dateTimeFormatter;
+			this.logger = logger;
+		}
+		public void FilterData(int cityDistrict,DateTime firstDeliveryTime, string connectionString)
+		{
 			var orders = SelectOrders(connectionString, cityDistrict);
-			var filteredOrders = FilterFile(orders, firstDeliveryTime, firstDeliveryTime.AddMinutes(30.0), serviceProvider);
+			var filteredOrders = FilterFile(orders, firstDeliveryTime, firstDeliveryTime.AddMinutes(30.0));
 			Console.WriteLine("Отфильтрованные записи");
 			PrintResult(filteredOrders);
 			SaveResult(filteredOrders, connectionString);
@@ -45,9 +52,7 @@ namespace DeliveryService.Repositories
 					saveResultCommand.ExecuteNonQuery();
 				}
             }
-
-
-            
+			logger.Information("Результат сохранён в базу данных");
         }
 		private List<(int, int, int, string)> SelectOrders(string connectionString, int districtId)
 		{
@@ -72,19 +77,19 @@ namespace DeliveryService.Repositories
 				return ordersData;
 			}
 		}
-		private List<Order> FilterFile(List<(int, int, int, string)> ordersData, DateTime startTime, DateTime endTime, ServiceProvider serviceProvider)
+		private List<Order> FilterFile(List<(int, int, int, string)> ordersData, DateTime startTime, DateTime endTime)
 		{
-			IDateTimeFormatterService? dateTimeFormatterService = serviceProvider.GetService<IDateTimeFormatterService>();
 			var filteredData = new List<Order>();
 			foreach (var order in ordersData)
 			{
-				var dateTimeString = dateTimeFormatterService.Format(order.Item4);
+				var dateTimeString = dateTimeFormatter.Format(order.Item4);
 				var dateTime = DateTime.Parse(dateTimeString);
 				if (dateTime > startTime && dateTime < endTime)
 				{
 					filteredData.Add(new Order() { Id = order.Item1, Weight = order.Item2, DisctrictId = order.Item3, DeliveryTime = dateTime });
 				}
 			}
+			logger.Information("Данные были отфильтрованы");
 			return filteredData;
 		}
 		private void PrintResult(List<Order> orders)

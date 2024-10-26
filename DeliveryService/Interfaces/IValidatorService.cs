@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DeliveryService.Interfaces
 {
-    internal interface IValidatorService
+    public interface IValidatorService
     {
         (int,DateTime) Validate(ServiceProvider serviceProvider);
     }
