@@ -8,6 +8,6 @@ namespace DeliveryService.Interfaces
 {
     public interface IDateTimeFormatter
     {
-        string Format(string dateTime);
+        DateTime Format(string dateTime);
     }
 }

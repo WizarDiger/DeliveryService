@@ -10,6 +10,7 @@ using Spectre.Console;
 using Spectre;
 using Serilog;
 using DeliveryService.Services;
+using DeliveryService.Validators;
 namespace DeliveryService
 {
 	public class ServiceProviderFactory
@@ -20,10 +21,10 @@ namespace DeliveryService
             var logger = new LoggerConfiguration().WriteTo.SQLite(settings.DbFilePath, batchSize: 1).CreateLogger();
             var services = new ServiceCollection();
 			services.AddTransient<IFilterResultRepository,FilterResultRepository>();
-			services.AddTransient<IValidatorService,Validator>();
 			services.AddTransient<IDateTimeFormatter, DateTimeFormatter>();
 			services.AddTransient<IFilterResultService, FilterResultService>();
 			services.AddTransient<FindCommand>();
+			services.AddTransient<FindCommandValidator>();
 			services.AddSingleton<ILogger>(logger);
 			services.AddSingleton(settings);
 			var registar = new ServiceCollectionRegistrar(services);

@@ -47,26 +47,27 @@ namespace DeliveryService.Repositories
             }
 			logger.Information("Результат сохранён в базу данных");
         }
-		public List<(int, int, int, string)> SelectOrders(int districtId)
+		public List<Order> SelectOrders(int districtId, string firstDeliveryDateTime)
 		{
 			using (var connection = new SqliteConnection(settings.ConnectionString))
 			{
 				connection.Open();
-				using var command = new SqliteCommand($@"SELECT * FROM Orders WHERE DistrictId = @districtId", connection)
+				using var command = new SqliteCommand($@"SELECT * FROM Orders WHERE DistrictId = @districtId AND DeliveryTime BETWEEN @firstDeliveryDateTime AND DATETIME(@firstDeliveryDateTime,""30 minutes"")", connection)
 				{
 					Parameters =
 					{
-						new("@districtId", districtId)
-					}
+						new("@districtId", districtId),
+
+                        new("@firstDeliveryDateTime", firstDeliveryDateTime)
+                    }
 				};
 				var reader = command.ExecuteReader();
-				var ordersData = new List<(int, int, int, string)>();
+				var ordersData = new List<Order>();
 				while (reader.Read())
 				{
-					ordersData.Add((reader.GetInt32(0), reader.GetInt32(1), reader.GetInt32(2), reader.GetString(3)));
+					ordersData.Add(new Order() { Id = reader.GetInt32(0), Weight = reader.GetInt32(1), DisctrictId = reader.GetInt32(2), DeliveryTime = dateTimeFormatter.Format(reader.GetString(3)) });
 				}
-
-				return ordersData;
+                return ordersData;
 			}
 		}
 	}

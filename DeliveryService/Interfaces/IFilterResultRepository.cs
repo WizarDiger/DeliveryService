@@ -11,7 +11,7 @@ namespace DeliveryService.Interfaces
 	public interface IFilterResultRepository
 	{
         void SaveResult(List<Order> orders);
-        List<(int, int, int, string)> SelectOrders(int districtId);
+        List<Order> SelectOrders(int districtId, string firstDeliveryDateTime);
 
     }
 }

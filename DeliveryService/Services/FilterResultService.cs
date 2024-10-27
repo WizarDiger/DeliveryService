@@ -23,34 +23,24 @@ namespace DeliveryService.Services
             this.logger = logger;
         }
 
-        public void FilterData(int cityDistrict, DateTime firstDeliveryTime)
+        public void FilterData(int cityDistrict, string firstDeliveryDateTime)
         {
-            var orders = filterResultRepository.SelectOrders(cityDistrict);
-            var filteredOrders = FilterFile(orders, firstDeliveryTime, firstDeliveryTime.AddMinutes(30.0));
+            var orders = filterResultRepository.SelectOrders(cityDistrict, firstDeliveryDateTime);
+  
             Console.WriteLine("Отфильтрованные записи");
-            PrintResult(filteredOrders);
-            filterResultRepository.SaveResult(filteredOrders);
+            PrintResult(orders);
+            filterResultRepository.SaveResult(orders);
         }
-        private List<Order> FilterFile(List<(int, int, int, string)> ordersData, DateTime startTime, DateTime endTime)
-        {
-            var filteredData = new List<Order>();
-            foreach (var order in ordersData)
-            {
-                var dateTimeString = dateTimeFormatter.Format(order.Item4);
-                var dateTime = DateTime.Parse(dateTimeString);
-                if (dateTime > startTime && dateTime < endTime)
-                {
-                    filteredData.Add(new Order() { Id = order.Item1, Weight = order.Item2, DisctrictId = order.Item3, DeliveryTime = dateTime });
-                }
-            }
-            logger.Information("Данные были отфильтрованы");
-            return filteredData;
-        }
+    
         private void PrintResult(List<Order> orders)
         {
             foreach (var order in orders)
             {
                 Console.WriteLine(order.Id + " " + order.Weight + " " + order.DisctrictId + " " + order.DeliveryTime);
+            }
+            if (orders.Count == 0)
+            {
+                Console.WriteLine("Записей не найдено");
             }
         }
     }

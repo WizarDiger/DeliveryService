@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace DeliveryService.Validators
 {
-    public class FindCommandValidator
+    public class FindCommandValidator:IFindCommandValidator
     {
         private readonly ILogger logger;
         private readonly IDateTimeFormatter dateTimeFormatterService;
@@ -42,19 +42,10 @@ namespace DeliveryService.Validators
                 logger.Error("Некорректный параметр {firstDeliveryDateTime}", parameters.FirstDeliveryDateTime);
                 return ValidationResult.Error("Дата первого заказа должна быть в формате yyyy-MM-dd HH:mm:ss");
             }
-            else
-            {
-                try
-                {
-                    DateTime.Parse(dateTimeFormatterService.Format(parameters.FirstDeliveryDateTime));
-                }
-                catch
-                {
-                    logger.Error("Некорректный параметр {firstDeliveryDateTime}", parameters.FirstDeliveryDateTime);
-                    return ValidationResult.Error("Дата первого заказа должна быть в формате yyyy-MM-dd HH:mm:ss");
-                }
-                return ValidationResult.Success();
-            }
+
+            return ValidationResult.Success();
+
         }
+
     }
 }
