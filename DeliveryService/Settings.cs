@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+namespace DeliveryService;
 
-namespace DeliveryService
+public class Settings
 {
-    public class Settings
-    {
-        public string DbFilePath { get; init; } 
-        public string ConnectionString { get; init; } 
-    }
+    public string DbFilePath { get; init; } 
+    public string ConnectionString { get; init; } 
 }

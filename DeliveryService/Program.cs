@@ -1,12 +1,10 @@
 ﻿using DeliveryService;
 using System.CommandLine.Parsing;
-using Serilog;
 using Spectre.Console;
 using Spectre.Console.Cli;
 Console.OutputEncoding = System.Text.Encoding.UTF8;
 var settings = new Settings() {DbFilePath= "ordersdata.db",ConnectionString= "Data Source=ordersdata.db" };
 var registrar = new ServiceProviderFactory().Create(settings);
-//var connectionString = "Data Source=ordersdata.db";
 while (true)
 {
     try
@@ -15,7 +13,7 @@ while (true)
         AnsiConsole.Write("> ");
         var input = Console.ReadLine();
         var arguments = CommandLineStringSplitter.Instance.Split(input);
-
+        
         app.Configure(config =>
         {
             config.PropagateExceptions();
