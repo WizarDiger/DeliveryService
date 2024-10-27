@@ -16,12 +16,14 @@ namespace DeliveryService.Repositories
 	{
 		private readonly IDateTimeFormatterService dateTimeFormatter;
         private readonly ILogger logger;
-        public FilterRepository(IDateTimeFormatterService dateTimeFormatter, ILogger logger) 
+		private readonly string connectionString;
+        public FilterRepository(IDateTimeFormatterService dateTimeFormatter, ILogger logger, string connectionString) 
 		{
 			this.dateTimeFormatter = dateTimeFormatter;
 			this.logger = logger;
+			this.connectionString = connectionString;
 		}
-		public void FilterData(int cityDistrict,DateTime firstDeliveryTime, string connectionString)
+		public void FilterData(int cityDistrict,DateTime firstDeliveryTime)
 		{
 			var orders = SelectOrders(connectionString, cityDistrict);
 			var filteredOrders = FilterFile(orders, firstDeliveryTime, firstDeliveryTime.AddMinutes(30.0));

@@ -9,6 +9,6 @@ namespace DeliveryService.Interfaces
 {
 	public interface IFilterService
 	{
-		void FilterData(int cityDisctrict, DateTime firstDeliveryTime, string connectionString);
+		void FilterData(int cityDisctrict, DateTime firstDeliveryTime);
 	}
 }

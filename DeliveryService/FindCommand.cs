@@ -14,7 +14,7 @@ using Spectre.Console.Cli;
 using Serilog;
 namespace DeliveryService
 {
-    public class FindCommand:Command<FindCommand.FindParameters>
+    public class FindCommand:Command<FindParameters>
     {
         private readonly ILogger logger;
         private readonly IDateTimeFormatterService dateTimeFormatterService;
@@ -26,13 +26,6 @@ namespace DeliveryService
             this.dateTimeFormatterService = dateTimeformatterService;
             this.filterService = filterService;
             this.connectionString = "Data Source=ordersdata.db";
-        }
-        public class FindParameters : CommandSettings
-        {
-            [CommandOption("--cityRegion")]
-            public string cityRegion { get; init; }
-            [CommandOption("--firstDeliveryDateTime")]
-            public string firstDeliveryDateTime { get; init; }
         }
         public override ValidationResult Validate(CommandContext context, FindParameters? parameters) 
         {
