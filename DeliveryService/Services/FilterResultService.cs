@@ -8,13 +8,11 @@ namespace DeliveryService.Services;
 public class FilterResultService:IFilterResultService
 {
     private readonly IFilterResultRepository filterResultRepository;
-    private readonly IDateTimeFormatter dateTimeFormatter;
     private readonly ILogger logger;
 
-    public FilterResultService(IFilterResultRepository filterResultRepository,IDateTimeFormatter dateTimeFormatter, ILogger logger)
+    public FilterResultService(IFilterResultRepository filterResultRepository, ILogger logger)
     {
         this.filterResultRepository = filterResultRepository;
-        this.dateTimeFormatter = dateTimeFormatter;
         this.logger = logger;
     }
 

@@ -10,7 +10,7 @@ public class FindCommandValidatorTests
     [SetUp]
     public void Setup()
     {
-        this.validator = new FindCommandValidator(new DateTimeFormatter(), Substitute.For<ILogger>());    
+        this.validator = new FindCommandValidator(Substitute.For<ILogger>());    
     }
 
     [Test]

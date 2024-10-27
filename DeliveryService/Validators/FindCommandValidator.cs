@@ -8,7 +8,7 @@ namespace DeliveryService.Validators;
 public class FindCommandValidator:IFindCommandValidator
 {
     private readonly ILogger logger;
-    public FindCommandValidator(IDateTimeFormatter dateTimeFormatterService, ILogger logger)
+    public FindCommandValidator(ILogger logger)
     {
         this.logger = logger;
     }

@@ -8,9 +8,9 @@ namespace DeliveryService.Repositories;
 public class FilterResultRepository:IFilterResultRepository
 {
 	private readonly IDateTimeFormatter dateTimeFormatter;
-        private readonly ILogger logger;
+    private readonly ILogger logger;
 	private readonly Settings settings;
-        public FilterResultRepository(IDateTimeFormatter dateTimeFormatter, ILogger logger, Settings settings) 
+	public FilterResultRepository(IDateTimeFormatter dateTimeFormatter, ILogger logger, Settings settings)
 	{
 		this.dateTimeFormatter = dateTimeFormatter;
 		this.logger = logger;

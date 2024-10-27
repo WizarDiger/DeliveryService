@@ -8,13 +8,11 @@ namespace DeliveryService;
 public class FindCommand:Command<FindParameters>
 {
     private readonly ILogger logger;
-    private readonly IDateTimeFormatter dateTimeFormatterService;
     private readonly IFilterResultService filterService;
     private readonly IFindCommandValidator findCommandValidator;
-    public FindCommand(IFilterResultService filterService,IDateTimeFormatter dateTimeformatterService, ILogger logger, IFindCommandValidator findCommandValidator)
+    public FindCommand(IFilterResultService filterService, ILogger logger, IFindCommandValidator findCommandValidator)
     {
         this.logger = logger;
-        this.dateTimeFormatterService = dateTimeformatterService;
         this.filterService = filterService;
         this.findCommandValidator = findCommandValidator;
 
