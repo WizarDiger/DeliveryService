@@ -13,7 +13,7 @@ namespace DeliveryService
     {
         public (int,DateTime) Validate(ServiceProvider serviceProvider)
         {
-            IDateTimeFormatterService? dateTimeFormatterService = serviceProvider.GetRequiredService<IDateTimeFormatterService>();
+            IDateTimeFormatter? dateTimeFormatterService = serviceProvider.GetRequiredService<IDateTimeFormatter>();
             Console.WriteLine("Введите id района");
             var cityDistrict = Console.ReadLine();
             Console.WriteLine("Введите время первого заказа в формате yyyy-MM-dd HH:mm:ss");
@@ -36,7 +36,7 @@ namespace DeliveryService
         public void ValidateDateTime(string dateTime, ServiceProvider serviceProvider) 
         {
             Regex regex = new Regex("^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$");
-            IDateTimeFormatterService? dateTimeFormatterService = serviceProvider.GetRequiredService<IDateTimeFormatterService>();
+            IDateTimeFormatter? dateTimeFormatterService = serviceProvider.GetRequiredService<IDateTimeFormatter>();
             if (!regex.Match(dateTime).Success)
             {
                 Console.WriteLine("Дата первого заказа должна быть в формате yyyy-MM-dd HH:mm:ss");

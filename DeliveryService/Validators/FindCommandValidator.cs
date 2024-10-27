@@ -1,32 +1,26 @@
-﻿using System;
+﻿using DeliveryService.Interfaces;
+using Serilog;
+using Spectre.Console;
+using Spectre.Console.Cli;
+using System;
 using System.Collections.Generic;
-using System.CommandLine;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using DeliveryService.Interfaces;
-using DeliveryService.Repositories;
-using Microsoft.Extensions.DependencyInjection;
-using Spectre;
-using Spectre.Console;
-using Spectre.Console.Cli;
-using Serilog;
-namespace DeliveryService
+
+namespace DeliveryService.Validators
 {
-    public class FindCommand:Command<FindParameters>
+    public class FindCommandValidator
     {
         private readonly ILogger logger;
         private readonly IDateTimeFormatter dateTimeFormatterService;
-        private readonly IFilterResultService filterService;
-        public FindCommand(IFilterResultService filterService,IDateTimeFormatter dateTimeformatterService, ILogger logger)
+        public FindCommandValidator(IDateTimeFormatter dateTimeFormatterService, ILogger logger)
         {
             this.logger = logger;
-            this.dateTimeFormatterService = dateTimeformatterService;
-            this.filterService = filterService;
-
+            this.dateTimeFormatterService = dateTimeFormatterService;
         }
-        public override ValidationResult Validate(CommandContext context, FindParameters? parameters) 
+        public ValidationResult Validate(FindParameters? parameters)
         {
             Regex cityRegionRegex = new Regex(@"^[0-9]+$");
 
@@ -61,12 +55,6 @@ namespace DeliveryService
                 }
                 return ValidationResult.Success();
             }
-        }
-        public override int Execute(CommandContext context, FindParameters parameters)
-        {
-            filterService.FilterData(int.Parse(parameters.CityRegion),DateTime.Parse(parameters.FirstDeliveryDateTime));
-            logger.Information("Успешная фильтрация");
-            return 0;
         }
     }
 }

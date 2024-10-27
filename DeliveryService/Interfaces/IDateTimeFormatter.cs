@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DeliveryService.Interfaces
 {
-    public interface IDateTimeFormatterService
+    public interface IDateTimeFormatter
     {
         string Format(string dateTime);
     }

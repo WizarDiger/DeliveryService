@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DeliveryService
 {
-    public class DateTimeFormatter:IDateTimeFormatterService
+    public class DateTimeFormatter:IDateTimeFormatter
     {
         public string Format(string dateTime)
         {

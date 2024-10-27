@@ -9,9 +9,9 @@ namespace DeliveryService
 {
     public class FindParameters : CommandSettings
     {
-        [CommandOption("--cityRegion")]
-        public string cityRegion { get; init; }
-        [CommandOption("--firstDeliveryDateTime")]
-        public string firstDeliveryDateTime { get; init; }
+        [CommandArgument(0,"[cityRegion]")]
+        public string? CityRegion { get; init; }
+        [CommandArgument(1,"[firstDeliveryDateTime]")]
+        public string? FirstDeliveryDateTime { get; init; }
     }
 }
