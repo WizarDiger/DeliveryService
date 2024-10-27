@@ -21,8 +21,10 @@ public class FilterResultRepository:IFilterResultRepository
 	{
             using (var connection = new SqliteConnection(settings.ConnectionString))
             {
-                connection.Open();
-			foreach (var order in orders)
+            connection.Open();
+            var command = new SqliteCommand($@"DELETE FROM Results", connection);
+            var reader = command.ExecuteReader();
+            foreach (var order in orders)
 			{
 
 				using var saveResultCommand = new SqliteCommand($@"INSERT INTO ""Results"" (""OrderId"",""Weight"", ""DistrictId"", ""DeliveryTime"") VALUES (@orderId,@weight,@districtId,@deliveryTime)", connection)
@@ -31,8 +33,8 @@ public class FilterResultRepository:IFilterResultRepository
 					{
 						new("@orderId",order.Id),
 						new("@weight",order.Weight),
-                            new("@districtId",order.DisctrictId),
-                            new("@deliveryTime",order.DeliveryTime)
+                        new("@districtId",order.DisctrictId),
+                        new("@deliveryTime",order.DeliveryTime)
 					}
 				};
 				saveResultCommand.ExecuteNonQuery();

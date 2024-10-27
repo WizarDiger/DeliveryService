@@ -16,8 +16,8 @@ public class ServiceProviderFactory
 	public ServiceCollectionRegistrar Create(Settings settings)
 	{
 		//Для демонстрации batchSize равен 1 чтобы логи писались сразу
-            var logger = new LoggerConfiguration().WriteTo.SQLite(settings.DbFilePath, batchSize: 1).CreateLogger();
-            var services = new ServiceCollection();
+        var logger = new LoggerConfiguration().WriteTo.SQLite(settings.DbFilePath, batchSize: 1).CreateLogger();
+        var services = new ServiceCollection();
 		services.AddTransient<IFilterResultRepository,FilterResultRepository>();
 		services.AddTransient<IDateTimeFormatter, DateTimeFormatter>();
 		services.AddTransient<IFilterResultService, FilterResultService>();

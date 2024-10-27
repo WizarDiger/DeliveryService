@@ -23,8 +23,8 @@ public class FindCommand:Command<FindParameters>
     }
     public override int Execute(CommandContext context, FindParameters parameters)
     {
-        filterService.FilterData(int.Parse(parameters.CityRegion),parameters.FirstDeliveryDateTime);
         logger.Information($"Приняты параметры {parameters.CityRegion} {parameters.FirstDeliveryDateTime}");
+        filterService.FilterData(int.Parse(parameters.CityRegion),parameters.FirstDeliveryDateTime);
         logger.Information("Успешная фильтрация");
         return 0;
     }

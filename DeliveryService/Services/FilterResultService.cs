@@ -19,7 +19,6 @@ public class FilterResultService:IFilterResultService
     public void FilterData(int cityDistrict, string firstDeliveryDateTime)
     {
         var orders = filterResultRepository.SelectOrders(cityDistrict, firstDeliveryDateTime);
-
         Console.WriteLine("Отфильтрованные записи");
         PrintResult(orders);
         filterResultRepository.SaveResult(orders);
@@ -27,6 +26,10 @@ public class FilterResultService:IFilterResultService
 
     private void PrintResult(List<Order> orders)
     {
+        if (orders.Count == 0)
+        {
+            Console.WriteLine("Записей не найдено");
+        }
         var resultTable = new Table();
         resultTable.AddColumn("Id");
         resultTable.AddColumn("Weight");
@@ -35,11 +38,7 @@ public class FilterResultService:IFilterResultService
         foreach (var order in orders)
         {              
             resultTable.AddRow(order.Id.ToString(), order.Weight.ToString(), order.DisctrictId.ToString(),order.DeliveryTime.ToString());
-            AnsiConsole.Write(resultTable);
         }
-        if (orders.Count == 0)
-        {
-            Console.WriteLine("Записей не найдено");
-        }
+        AnsiConsole.Write(resultTable);
     }
 }
